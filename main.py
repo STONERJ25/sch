@@ -10,8 +10,8 @@ def get_days(code):
     for i in range(len(matching_row_numbers4)):
         cell4 = df.at[matching_row_numbers4[i], 'Day']  # Note that Excel uses 1-based indexing for rows, 0-based for columns
         if not pd.isna(cell4):
-            if cell4 not in Day_for_course:
-                Day_for_course.append(cell4)
+            
+            Day_for_course.append(cell4)
     return Day_for_course
 
 def get_time_slots(code):
@@ -23,8 +23,8 @@ def get_time_slots(code):
     for i in range(len(matching_row_numbers)):
         cell = df.at[matching_row_numbers[i], 'Time']  # Note that Excel uses 1-based indexing for rows, 0-based for columns
         if not pd.isna(cell):
-            if cell not in time_list_for_course:
-                time_list_for_course.append(cell)
+            
+            time_list_for_course.append(cell)
     return time_list_for_course
 def get_credit_amount(code):
     column_name2 = 'Code'  # Replace with the name of your column
@@ -60,6 +60,12 @@ def time_string_to_minutes(time_str):
     result_str = f'{start_minutes}-{end_minutes}'
 
     return result_str    
+def string_to_tuple(input_string):
+    start_str, end_str = input_string.split("-")
+    start = int(start_str)
+    end = int(end_str)
+    return (start, end)
+
 def conflict(time1, days1, time2, days2):
     if have_common_letter(days1, days2):
         if have_common_time(time1, time2):
@@ -121,3 +127,12 @@ elif total_credits<12:
     print("Credit total of " +str(total_credits)+ " is less than the 12.0 required to be a full time student")
 else:
     print("Credit total of " + str(total_credits))
+
+class1 = Course('EGR355')
+class2 = Course('MA222') 
+
+ts11  = string_to_tuple(time_string_to_minutes(class1.time_slots[0]))
+ts21 = string_to_tuple(time_string_to_minutes(class2.time_slots[0])) 
+ds11 = class1.days[0]
+ds21 = class2.days[0]
+print(conflict(ts11, ds11, ts21, ds21))
