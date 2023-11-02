@@ -66,7 +66,13 @@ def string_to_tuple(input_string):
     end = int(end_str)
     return (start, end)
 
-def conflict(time1, days1, time2, days2):
+def conflict(dt1,dt2):
+    dts1 = dt1.split(" ")
+    dts2 = dt2.split(" ")
+    days1 = dts1[0]
+    time1 = dts1[1]
+    days2 = dts2[0]
+    time2 = dts2[1]
     if have_common_letter(days1, days2):
         if have_common_time(time1, time2):
             return True
@@ -128,11 +134,81 @@ elif total_credits<12:
 else:
     print("Credit total of " + str(total_credits))
 
-class1 = Course('EGR355')
-class2 = Course('MA222') 
+master_list = []
 
-ts11  = string_to_tuple(time_string_to_minutes(class1.time_slots[0]))
-ts21 = string_to_tuple(time_string_to_minutes(class2.time_slots[0])) 
-ds11 = class1.days[0]
-ds21 = class2.days[0]
-print(conflict(ts11, ds11, ts21, ds21))
+# Initialize master_list with empty lists
+# Determine the dimensions of the 2D list
+num_instances = len(instances)
+max_time_slots = max(len(instance.time_slots) for instance in instances)
+
+# Initialize master_list as a 2D list
+master_list = [[0] * max_time_slots for _ in range(num_instances)]
+
+for i, instance in enumerate(instances):
+    for j in range(len(instance.time_slots)):
+        master_list[i][j] += 1  # Increment the value at index [i][j]
+
+
+
+# Count the number of 1s in each sub-list and store the counts in a new list
+count_of_ones = [sum(1 for element in sublist if element == 1) for sublist in master_list]
+# Print the counts
+#print(count_of_ones)
+course_lister = []
+for r in range(len(count_of_ones)):
+    temp_course = []
+    for q in range(count_of_ones[r]):
+        
+        temp_course.append(f'{instances[r].time_slots[q]}'+' '+f'{instances[r].days[q]}')
+    course_lister.append(temp_course)
+#print(course_lister)
+from itertools import product
+
+def all_combinations(lst):
+    if not lst:
+        return [()]
+    
+    first_list = lst[0]
+    rest_lists = lst[1:]
+    
+    # Recursively get all combinations of the rest of the lists
+    rest_combinations = all_combinations(rest_lists)
+    
+    # For each element in the first list, combine it with all combinations of the rest
+    result = []
+    for element in first_list:
+        result.extend((element, *comb) for comb in rest_combinations)
+    
+    return result
+
+# Example usage:
+
+combinations = all_combinations(course_lister)
+
+def has_shared_property(lst, property_check_func):
+    for i in range(len(lst)):
+        for j in range(i + 1, len(lst)):
+            if property_check_func(lst[i], lst[j]):
+
+                return True
+    return False
+
+for combo in combinations:
+    print(list(combo))
+    result = has_shared_property(list(combo), conflict)
+    if result==False:
+        x=0
+        print('nope')
+    else:
+        print("Here is a Schudule that works:" f'{combo}')
+        break
+
+
+
+
+# Example usage
+
+
+# Check if any two items in the list are equal
+
+
