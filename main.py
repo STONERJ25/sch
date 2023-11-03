@@ -1,5 +1,5 @@
 import pandas as pd
-
+import sys
 df = pd.read_excel(r'C:\Users\Joshua Stoner\Desktop\Project for CS Club\Book.xlsx')
 def get_days(code):
     column_name4 = 'Code'  # Replace with the name of your column
@@ -40,16 +40,19 @@ def get_credit_amount(code):
     return credit[0]
 def time_string_to_minutes(time_str):
     # Split the time string into start and end times
-    start_time, end_time = time_str.split('-')
-
+    times1111 = time_str.split('-')
+    start_time =times1111[0]
+    end_time =times1111[1]
     # Function to convert HH:MM[am/pm] to minutes since midnight
     def time_to_minutes(time):
+      #  print(time)
         hh, mm, ampm = time[:2], time[-4:-2], time[-2:]
 
         hh = int(hh)
         mm = int(mm)
         if ampm == 'pm' and hh != 12:
             hh += 12
+       # print(hh * 60 + mm)
         return hh * 60 + mm
 
     # Convert start and end times to minutes
@@ -69,19 +72,26 @@ def string_to_tuple(input_string):
 def conflict(dt1,dt2):
     dts1 = dt1.split(" ")
     dts2 = dt2.split(" ")
-    days1 = dts1[0]
-    time1 = dts1[1]
-    days2 = dts2[0]
-    time2 = dts2[1]
+    days1 = dts1[1]
+    time1 = dts1[0]
+    days2 = dts2[1]
+    time2 = dts2[0]
+   # print(time1)
+    time11 = string_to_tuple(time_string_to_minutes(time1))
+    time22 = string_to_tuple(time_string_to_minutes(time2))
     if have_common_letter(days1, days2):
-        if have_common_time(time1, time2):
+        if have_common_time(time11, time22):
+           # print("We have a common time")
             return True
         else:
+            #print("Pass conflict")
             return False
+            
     else:
+        #print("Pass days")
         return False
 def have_common_time(time1, time2):
-    return max(time1) >= min(time2) and max(time1) >= min(time2)
+    return min(time1) <= max(time2) and min(time2) <= max(time1)
 
 
 
@@ -163,7 +173,7 @@ for r in range(len(count_of_ones)):
     course_lister.append(temp_course)
 #print(course_lister)
 from itertools import product
-
+#print(course_lister)
 def all_combinations(lst):
     if not lst:
         return [()]
@@ -194,16 +204,19 @@ def has_shared_property(lst, property_check_func):
     return False
 
 for combo in combinations:
-    print(list(combo))
+    #print(list(combo))
     result = has_shared_property(list(combo), conflict)
     if result==False:
-        x=0
-        print('nope')
-    else:
         print("Here is a Schudule that works:" f'{combo}')
-        break
-
-
+        final_schdule = list(combo)
+        for i in range(len(final_schdule)):
+            print(f'{instances[i].code}: {final_schdule[i]}')
+        sys.exit()
+        
+    else:
+        pass
+        #print('nope')
+print("No possible Schdule found")
 
 
 # Example usage
