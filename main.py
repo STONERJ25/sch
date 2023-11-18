@@ -4,7 +4,7 @@ from excelread import Course
 import sys
 
 
-df = pd.read_excel(r'C:\Users\Joshua Stoner\Desktop\Project for CS Club\Book.xlsx')
+df = pd.read_excel(r'Book.xlsx')
 instances = []
 
 column_list1 = df['Code List'].dropna().tolist()
@@ -73,8 +73,7 @@ def have_common_letter(string1, string2):
     set2 = set(string2)
 
 # Combine the two lists
-course_options_d = column_list1 + column_list2
-course_options = list(set(course_options_d))
+
 def on_search(entry_text):
     # Function to handle the search logic
     # In this example, it simply filters a list based on the input
@@ -99,6 +98,7 @@ def remove_selected_item():
 
 def out_put_list():
     # Function to remove the selected item from the second list
+    instances = []
     selected_items = selected_listbox.get(0, tk.END)
     print("Selected Items:")
     for item in selected_items:
@@ -111,7 +111,7 @@ def out_put_list():
 def mainlogi(list_course):
     total_credits=0
     # Print the instances
-    for i, instance in enumerate(instances):
+    for i, instance in enumerate(list_course):
         print(f"Course {i + 1}: Name: {instance.code} Time Slots: {instance.time_slots} Credits: {instance.credits} Days: {instance.days}")
     for i, instance in enumerate(instances):
         total_credits +=instance.credits
@@ -128,13 +128,13 @@ def mainlogi(list_course):
 
     # Initialize master_list with empty lists
     # Determine the dimensions of the 2D list
-    num_instances = len(instances)
-    max_time_slots = max(len(instance.time_slots) for instance in instances)
+    num_instances = len(list_course)
+    max_time_slots = max(len(instance.time_slots) for instance in list_course)
 
     # Initialize master_list as a 2D list
     master_list = [[0] * max_time_slots for _ in range(num_instances)]
 
-    for i, instance in enumerate(instances):
+    for i, instance in enumerate(list_course):
         for j in range(len(instance.time_slots)):
             master_list[i][j] += 1  # Increment the value at index [i][j]
 
@@ -149,7 +149,7 @@ def mainlogi(list_course):
         temp_course = []
         for q in range(count_of_ones[r]):
             
-            temp_course.append(f'{instances[r].time_slots[q]}'+' '+f'{instances[r].days[q]}')
+            temp_course.append(f'{list_course[r].time_slots[q]}'+' '+f'{list_course[r].days[q]}')
         course_lister.append(temp_course)
     #print(course_lister)
     from itertools import product
@@ -182,7 +182,7 @@ def mainlogi(list_course):
 
                     return True
         return False
-
+    flag = True
     for combo in combinations:
         #print(list(combo))
         result = has_shared_property(list(combo), conflict)
@@ -190,17 +190,24 @@ def mainlogi(list_course):
             print("Here is a Schudule that works:" f'{combo}')
             final_schdule = list(combo)
             for i in range(len(final_schdule)):
-                print(f'{instances[i].code}: {final_schdule[i]}')
-            sys.exit()
+                print(f'{list_course[i].code}: {final_schdule[i]}')
+            flag = False
+            break
             
         else:
             pass
             #print('nope')
-    print("No possible Schdule found")
+    if  flag:
+        print("No possible Schdule found")
+
+l1 = list(set(column_list1))
+l2 = list(set(column_list2))
+l1.sort()
+l2.sort()
 
     
 # Sample data for demonstration
-all_results = course_options
+all_results = l1+l2
 #["Apple", "Banana", "Orange", "Grapes", "Watermelon", "Pineapple", "Mango", "Strawberry"]
 
 # Create the main window
@@ -230,7 +237,7 @@ result_listbox.bind("<Double-Button-1>", lambda event: add_to_selected_list())
 remove_button = tk.Button(root, text="Remove Selected", command=remove_selected_item)
 remove_button.pack()
 # Button to remove selected item from the second list
-output_button = tk.Button(root, text="Match", command=out_put_list)
+output_button = tk.Button(root, text="Generate Schedule", command=out_put_list)
 output_button.pack()
 
 # Initial display of all results
