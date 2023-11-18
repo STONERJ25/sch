@@ -30,7 +30,6 @@ def time_string_to_minutes(time_str):
     start_minutes = time_to_minutes(start_time)
     end_minutes = time_to_minutes(end_time)
 
-    # Format the result
     result_str = f'{start_minutes}-{end_minutes}'
 
     return result_str    
@@ -193,7 +192,6 @@ def mainlogi(list_course):
             
         else:
             pass
-            #print('nope')
     if  flag:
         print("No possible Schedule found")
 
