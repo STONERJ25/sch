@@ -41,21 +41,20 @@ def string_to_tuple(input_string):
     return (start, end)
 
 def conflict(dt1,dt2):
+
     dts1 = dt1.split(" ")
     dts2 = dt2.split(" ")
     days1 = dts1[1]
     time1 = dts1[0]
     days2 = dts2[1]
     time2 = dts2[0]
-
     time11 = string_to_tuple(time_string_to_minutes(time1))
     time22 = string_to_tuple(time_string_to_minutes(time2))
     if have_common_letter(days1, days2):
-        if have_common_time(time11, time22):
 
+        if have_common_time(time11, time22):
             return True
         else:
-
             return False
             
     else:
@@ -63,8 +62,14 @@ def conflict(dt1,dt2):
         return False
 
 def have_common_time(time1, time2):
-    return min(time1) <= max(time2) and min(time2) <= max(time1)
-
+    if min(time1) <= max(time2) and min(time2) <= max(time1):
+        return True
+    elif min(time2)==min(time1):
+        return True
+    elif max(time2)==max(time1):
+        return True
+    else:
+        return False
 
 
 def have_common_letter(string1, string2):
@@ -72,6 +77,11 @@ def have_common_letter(string1, string2):
     set1 = set(string1)
     set2 = set(string2)
 
+    # Check if there is any common letter
+    common_letters = set1.intersection(set2)
+
+    # Return True if there are common letters, otherwise False
+    return len(common_letters) > 0
 
 
 def on_search(entry_text):
@@ -99,9 +109,9 @@ def out_put_list():
 
     instances = []
     selected_items = selected_listbox.get(0, tk.END)
-    print("Selected Items:")
+    #print("Selected Items:")
     for item in selected_items:
-        print(item)
+      #  print(item)
         instance = Course(item)
     
 
@@ -176,7 +186,9 @@ def mainlogi(list_course):
     def has_shared_property(lst, property_check_func):
         for i in range(len(lst)):
             for j in range(i + 1, len(lst)):
+
                 if property_check_func(lst[i], lst[j]):
+
                     return True
         return False
 

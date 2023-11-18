@@ -69,7 +69,7 @@ class Course:
             self.code = course_name_to_code(code)
         else:
             self.code = code
-        print(self.code)
+        #print(self.code)
         self.time_slots = get_time_slots(self.code)
         self.name = get_name(self.code)
         self.credits = get_credit_amount(self.code)
