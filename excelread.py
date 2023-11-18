@@ -50,6 +50,18 @@ def course_name_to_code(name):
             
             Code_for_course.append(cell4)
     return Code_for_course[0]
+def get_name(code):
+    column_name = 'Code' 
+    df[column_name].fillna('', inplace=True)
+    result = df[df[column_name].str.contains(code)]
+    matching_row_numbers = result.index.tolist()
+    time_list_for_course = []
+    for i in range(len(matching_row_numbers)):
+        cell = df.at[matching_row_numbers[i], 'Course Title']  
+        if not pd.isna(cell):
+            
+            time_list_for_course.append(cell)
+    return time_list_for_course[0]
 class Course:
     def __init__(self, code):
         
@@ -59,7 +71,7 @@ class Course:
             self.code = code
         print(self.code)
         self.time_slots = get_time_slots(self.code)
-       
+        self.name = get_name(self.code)
         self.credits = get_credit_amount(self.code)
         self.days = get_days(self.code)
 
