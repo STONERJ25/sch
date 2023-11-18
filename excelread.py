@@ -38,85 +38,37 @@ def get_credit_amount(code):
             if cell1 not in credit:
                 credit.append(cell1)
     return credit[0]
-def time_string_to_minutes(time_str):
-    # Split the time string into start and end times
-    times1111 = time_str.split('-')
-    start_time =times1111[0]
-    end_time =times1111[1]
-    # Function to convert HH:MM[am/pm] to minutes since midnight
-    def time_to_minutes(time):
-      #  print(time)
-        hh, mm, ampm = time[:2], time[-4:-2], time[-2:]
-
-        hh = int(hh)
-        mm = int(mm)
-        if ampm == 'pm' and hh != 12:
-            hh += 12
-       # print(hh * 60 + mm)
-        return hh * 60 + mm
-
-    # Convert start and end times to minutes
-    start_minutes = time_to_minutes(start_time)
-    end_minutes = time_to_minutes(end_time)
-
-    # Format the result
-    result_str = f'{start_minutes}-{end_minutes}'
-
-    return result_str    
-def string_to_tuple(input_string):
-    start_str, end_str = input_string.split("-")
-    start = int(start_str)
-    end = int(end_str)
-    return (start, end)
-
-def conflict(dt1,dt2):
-    dts1 = dt1.split(" ")
-    dts2 = dt2.split(" ")
-    days1 = dts1[1]
-    time1 = dts1[0]
-    days2 = dts2[1]
-    time2 = dts2[0]
-   # print(time1)
-    time11 = string_to_tuple(time_string_to_minutes(time1))
-    time22 = string_to_tuple(time_string_to_minutes(time2))
-    if have_common_letter(days1, days2):
-        if have_common_time(time11, time22):
-           # print("We have a common time")
-            return True
-        else:
-            #print("Pass conflict")
-            return False
+def course_name_to_code(name):
+    column_name4 = 'Course Title'  # Replace with the name of your column
+    df[column_name4].fillna('', inplace=True)
+    result4 = df[df[column_name4].str.contains(name)]
+    matching_row_numbers4 = result4.index.tolist()
+    Code_for_course = []
+    for i in range(len(matching_row_numbers4)):
+        cell4 = df.at[matching_row_numbers4[i], 'Code List']  # Note that Excel uses 1-based indexing for rows, 0-based for columns
+        if not pd.isna(cell4):
             
-    else:
-        #print("Pass days")
-        return False
-def have_common_time(time1, time2):
-    return min(time1) <= max(time2) and min(time2) <= max(time1)
-
-
-
-def have_common_letter(string1, string2):
-    # Create sets of characters for both strings
-    set1 = set(string1)
-    set2 = set(string2)
-    
-    # Use the any function to check for common elements
-    return any(char in set1 for char in set2)
-
+            Code_for_course.append(cell4)
+    return Code_for_course[0]
 class Course:
     def __init__(self, code):
         # Instance attributes (unique to each instance)
-        self.code = code
-        self.time_slots = get_time_slots(code)
+        if len(code) > 6:
+            self.code = course_name_to_code(code)
+        else:
+            self.code = code
+        print(self.code)
+        self.time_slots = get_time_slots(self.code)
         #self.time_slots_mins = time_string_to_minutes(self.time_slots)
-        self.credits = get_credit_amount(code)
-        self.days = get_days(code)
+        self.credits = get_credit_amount(self.code)
+        self.days = get_days(self.code)
 
 #course1 = Course('EGR192')
 #print(course1.time_slots)
 #print(course1.credits)
 #print(course1.days)
 instances = []
+'''
 while True:
     name = input("Enter a course: ").upper()
     
@@ -129,6 +81,7 @@ while True:
     another = input("Do you want to add another course? (yes/no): ")
     if another.lower() != 'yes':
         break
+
 total_credits=0
 # Print the instances
 for i, instance in enumerate(instances):
@@ -225,3 +178,4 @@ print("No possible Schdule found")
 # Check if any two items in the list are equal
 
 
+'''
