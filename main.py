@@ -311,13 +311,13 @@ all_results = l1+l2
 root = tk.Tk()
 root.title("Schedule Generator")
 
-search_entry = tk.Entry(root, width=30)
+search_entry = tk.Entry(root, width=60)
 search_entry.pack(pady=10)
-result_listbox = tk.Listbox(root, selectmode=tk.SINGLE, width=30)
+result_listbox = tk.Listbox(root, selectmode=tk.SINGLE, width=60)
 result_listbox.pack()
 
 
-selected_listbox = tk.Listbox(root, selectmode=tk.SINGLE, width=30)
+selected_listbox = tk.Listbox(root, selectmode=tk.SINGLE, width=60)
 selected_listbox.pack(pady=10)
 
 
