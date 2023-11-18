@@ -333,7 +333,7 @@ remove_button.pack()
 output_button = tk.Button(root, text="Generate Schedule", command=out_put_list)
 output_button.pack()
 
-text_widget = tk.Text(root, wrap=tk.WORD)
+text_widget = tk.Text(root, wrap=tk.WORD, width=100)
 text_widget.pack()
 
 
